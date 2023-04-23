@@ -4,7 +4,7 @@ This repository contains the code for my May 3, 2023 workshop at Greenville's Te
 
 ## WORK IN PROGRESS
 
-You may see this code continue to grow and evolve until the May 3, 2023 workshop. Since it's a demonstration project, I'll be a little messier than usual since it's we're deploying this (yet 🤫).
+You may see this code continue to grow and evolve until the May 3, 2023 workshop. Since it's a demonstration project, I'll be a little messier than usual. I promise I'm usually really tidy with production code!
 
 ## License
 
