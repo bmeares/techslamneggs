@@ -1,0 +1,20 @@
+version: '3.5'
+
+services:
+  techslamneggs:
+    build:
+      context: "./"
+      dockerfile: "./docker/techslamneggs/Dockerfile"
+
+    entrypoint: ["/bin/bash"]
+
+    environment:
+      MRSM_SQL_ETL: $MRSM_SQL_ETL
+
+    network_mode: "host"
+    container_name: "techslamneggs"
+    volumes:
+      - "./:/app"
+    init: true
+    tty: true
+

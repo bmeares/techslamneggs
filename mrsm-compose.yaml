@@ -1,0 +1,87 @@
+### This is for re-using existing Docker root.
+### Omit to create a local dir (defaults to ./root).
+root_dir: "/meerschaum"
+
+### All pipes are tagged with the project name
+### (defaults to directory name).
+project_name: "techslamneggs"
+
+### Specify the pipes one-by-one.
+sync:
+  pipes:
+    - connector: "plugin:fred"
+      metric: "price"
+      location: "eggs"
+      target: "price_eggs"
+      columns:
+        datetime: "DATE"
+      dtypes:
+        "PRICE": "float64"
+      parameters:
+        fred:
+          series_id: "APU0000708111"
+
+    - connector: "plugin:fred"
+      metric: "price"
+      location: "chicken"
+      target: "price_chicken"
+      columns:
+        datetime: "DATE"
+      dtypes:
+        "PRICE": "float64"
+      parameters:
+        fred:
+          # series_id: "APU0000FF1101"
+          series_id: "APU0000706111"
+
+    - connector: "sql:etl"
+      metric: "price"
+      location: "eggs_chicken_a"
+      target: "Food Prices A"
+      columns:
+        datetime: "DATE"
+      parameters:
+        query: |-
+          SELECT
+            e."DATE",
+            e."PRICE" AS "PRICE_EGGS",
+            c."PRICE" AS "PRICE_CHICKEN"
+          FROM "price_eggs" AS e
+          INNER JOIN "price_chicken" AS c
+            ON e."DATE" = c."DATE"
+
+    - connector: "sql:etl"
+      metric: "price"
+      location: "eggs_chicken_b"
+      target: "Food Prices B"
+      columns:
+        datetime: "DATE"
+        food: "FOOD"
+      parameters:
+        query: |-
+          SELECT
+            "DATE",
+            "PRICE",
+            'eggs' AS "FOOD"
+          FROM "price_eggs"
+          UNION ALL
+          SELECT
+            "DATE",
+            "PRICE",
+            'chicken' AS "FOOD"
+          FROM "price_chicken"
+
+
+### Define the MRSM_CONFIG for this isolated project.
+config:
+  meerschaum:
+    instance: "sql:etl"
+    connectors:
+      sql:
+        etl: MRSM{meerschaum:connectors:sql:etl}
+        tiny:
+          flavor: "sqlite"
+          database: "/app/tiny.db"
+
+### Other environment variables to include (e.g. AWS creds).
+environment: {}
