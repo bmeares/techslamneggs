@@ -31,7 +31,6 @@ sync:
         "PRICE": "float64"
       parameters:
         fred:
-          # series_id: "APU0000FF1101"
           series_id: "APU0000706111"
 
     - connector: "sql:etl"
